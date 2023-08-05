@@ -24,9 +24,9 @@ export default function Convert() {
   const getResult = obj => {
     let a,b
     obj.forEach(({symbol, current_price}) =>{
-      if(symbol == selCoin1){
+      if(symbol === selCoin1){
         a = (mainTxt * current_price) / 1
-      }else if(symbol == selCoin2){
+      }else if(symbol === selCoin2){
         b = current_price
       }
     })
