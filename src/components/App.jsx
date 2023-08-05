@@ -4,7 +4,6 @@ import CardPrincipal from '../components/CardPrincipal'
 import Card from './Card';
 import Header from './Header';
 import TableCoins from './TableCoins';
-import Graph from './Graph'
 import Convert from './Convert';
 import Footer from './Footer';
 
@@ -23,7 +22,7 @@ function App() {
   }
   useEffect(() => {
     getData()
-  },[])
+  },[getData])
   useEffect(() => {
     getData()
   },[selCur])
@@ -34,9 +33,19 @@ function App() {
       <Convert/>
       <main>
       <div className="cards_con">
-          {coins.map(({id,symbol,image,price_change_percentage_30d_in_currency,current_price},index) => {
+        {coins.map(({id,symbol,image,price_change_percentage_30d_in_currency,current_price},index) => {
             if(index != 0 && index <= 3){
-              return <Card key={index} coinId={id} cur={selCur} porcentaje={deleteDec(price_change_percentage_30d_in_currency,2)} price={`${symbol} - ${current_price} ${selCur}`} img={image} />
+            return (
+            <Card key={index}
+              coinId={id}
+              cur={selCur}
+              porcentaje={deleteDec(price_change_percentage_30d_in_currency,2)}
+              price={`${symbol} - ${current_price} ${selCur}`}
+              img={image}
+            />
+            );
+            } else {
+              return null; // Agrega un valor de retorno en el caso contrario
             }
           })}
         </div>

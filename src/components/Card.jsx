@@ -1,7 +1,6 @@
 import "../styles/Card.css"
 import Graph from "./Graph"
 import {colorDec} from './App'
-import { useEffect } from "react"
 
 export default function Card({coinId, cur, porcentaje, price, img}){
     return (
