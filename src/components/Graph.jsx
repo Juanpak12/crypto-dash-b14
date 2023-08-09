@@ -1,7 +1,7 @@
-import "../styles/Graph.css";
-import { useState, useEffect, useRef } from "react";
-import { Line } from "react-chartjs-2";
-import moment from "moment/moment";
+import "../styles/Graph.css"; // Importa los estilos del componente
+import { useState, useEffect, useRef } from "react"; // Importa los hooks de React
+import { Line } from "react-chartjs-2"; // Importa el componente Line de react-chartjs-2
+import moment from "moment/moment"; // Importa la librería moment para manipulación de fechas
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,8 +12,8 @@ import {
   Tooltip,
   Filler,
   Legend,
-} from "chart.js";
-import { numberF } from "./App";
+} from "chart.js"; // Importa componentes y funcionalidades de Chart.js
+import { numberF } from "./App"; // Importa la función numberF desde otro archivo
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +24,7 @@ ChartJS.register(
   Tooltip,
   Filler,
   Legend
-);
+); // Registra los componentes y funcionalidades en Chart.js
 
 export default function Graph({
   type = 1,
@@ -43,34 +43,34 @@ export default function Graph({
     ticks: {
       display: false,
     },
-  };
+  }; // Configuración de escala común para ambos tipos de gráficos
 
-  const [dates, setDates] = useState();
-  const [prices, setPrices] = useState();
-  const [gradient, setGradient] = useState();
-  const graphRef = useRef(null);
+  const [dates, setDates] = useState(); // Estado para almacenar las fechas
+  const [prices, setPrices] = useState(); // Estado para almacenar los precios
+  const [gradient, setGradient] = useState(); // Estado para el gradiente de fondo
+  const graphRef = useRef(null); // Crea una referencia no mutable
 
   const getData = async () => {
     const res = await fetch(
       `https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=${currency}&days=${days}&interval=daily`
-    );
-    const json = await res.json();
-    setDates(json.prices.map((item) => moment.unix(item[0]).format("MM-DD")));
-    setPrices(json.prices.map((item) => Math.round(item[1])));
+    ); // Realiza una petición a la API de CoinGecko
+    const json = await res.json(); // Convierte la respuesta en formato JSON
+    setDates(json.prices.map((item) => moment.unix(item[0]).format("MM-DD"))); // Obtiene las fechas y las formatea
+    setPrices(json.prices.map((item) => Math.round(item[1]))); // Obtiene los precios y los redondea
   };
 
   useEffect(() => {
-    getData();
-    const canvas = graphRef.current.firstChild;
+    getData(); // Llama a la función para obtener los datos
+    const canvas = graphRef.current.firstChild; // Accede al primer hijo del componente referenciado
     let BGradient = canvas
       .getContext("2d")
-      .createLinearGradient(0, 0, 0, canvas.height);
-    BGradient.addColorStop(0, "rgba(4, 191, 157, 1)");
-    BGradient.addColorStop(1, "rgba(4, 191, 157, 0)");
-    setGradient(BGradient);
+      .createLinearGradient(0, 0, 0, canvas.height); // Crea un gradiente lineal para el fondo del gráfico
+    BGradient.addColorStop(0, "rgba(4, 191, 157, 1)"); // Agrega un color de parada al gradiente
+    BGradient.addColorStop(1, "rgba(4, 191, 157, 0)"); // Agrega otra color de parada al gradiente
+    setGradient(BGradient); // Establece el gradiente en el estado
   }, []);
 
-  // Configuración de datos y opciones para el tipo 0
+  // Configuración de datos y opciones para el tipo 0 (gráfico con relleno)
   const dataType0 = {
     labels: dates,
     datasets: [
@@ -115,7 +115,7 @@ export default function Graph({
     },
   };
 
-  // Configuración de datos y opciones para el tipo 1
+  // Configuración de datos y opciones para el tipo 1 (gráfico sin relleno)
   const dataType1 = {
     labels: dates,
     datasets: [
@@ -147,6 +147,7 @@ export default function Graph({
 
   return (
     <div ref={graphRef} className="graph">
+      {/* Renderiza el componente Line de react-chartjs-2 con datos y opciones dependiendo del tipo */}
       <Line data={type === 0 ? dataType0 : dataType1} options={type === 0 ? optionsType0 : optionsType1} />
     </div>
   );
